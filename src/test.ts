@@ -2,7 +2,7 @@ let token = "eyJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoicmVmcmVzaCIsInJhbmRvbSI6eyJ0eXBlIj
 
 async function createUser(name: string, email: string) {
     let bodyData = JSON.stringify({name: name, email: email})
-    const response = await fetch("http://192.168.100.4:3000/user/", {
+    const response = await fetch("http://localhost:3000/user/", {
         method: "POST",
         headers: {
             "Content-type": "application/json",
@@ -17,7 +17,7 @@ async function createUser(name: string, email: string) {
 
 async function deleteUser(id: number) {
     let response = {}
-    try {response = await fetch("http://192.168.100.4:3000/user/" + id, {
+    try {response = await fetch("http://localhost:3000/user/" + id, {
         method: "DELETE",
         headers: {
             "Authorization": "Bearer " + token
