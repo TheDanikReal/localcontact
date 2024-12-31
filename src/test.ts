@@ -5,11 +5,7 @@ const baseUrl = `http://${domain}:${port}`
 
 async function createUser(name: string, email: string) {
     let bodyData = JSON.stringify({name: name, email: email})
-<<<<<<< HEAD
     const response = await fetch(`${baseUrl}/user/`, {
-=======
-    const response = await fetch("http://localhost:3000/user/", {
->>>>>>> 87ef3c4e0501918ccc02b1f6e593c33548ccec3e
         method: "POST",
         headers: {
             "Content-type": "application/json",
@@ -24,11 +20,7 @@ async function createUser(name: string, email: string) {
 
 async function deleteUser(id: number) {
     let response = {}
-<<<<<<< HEAD
     try {response = await fetch(`${baseUrl}/user/` + id, {
-=======
-    try {response = await fetch("http://localhost:3000/user/" + id, {
->>>>>>> 87ef3c4e0501918ccc02b1f6e593c33548ccec3e
         method: "DELETE",
         headers: {
             "Authorization": "Bearer " + token

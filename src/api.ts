@@ -81,6 +81,7 @@ app.route<{Querystring: IQueryString}>({
     url: "/users/search",
     schema: {
         tags: ["default"],
+        description: "Searches users in database by name",
         querystring: {
             type: "object",
             properties: {
@@ -104,6 +105,7 @@ app.route<{Body: User}>({
     url: "/user/",
     schema: {
         tags: ["default"],
+        description: "Adds a new user",
         security: bearer,
         //body: {
         //    type: "object",
@@ -132,6 +134,7 @@ app.route({
     url: "/users/save",
     schema: {
         tags: ["default"],
+        description: "Saves user to database file",
         security: bearer
     },
     preHandler: [auth],
@@ -144,6 +147,7 @@ app.route<{Request: RequestVerified, Params:UserID}>({
     url: "/user/:userid",
     schema: {
         tags: ["default"],
+        description: "Removes user by id",
         security: bearer,
         params: {
             type: "object",
@@ -163,7 +167,7 @@ app.route<{Params:UserID, Body:User}>({
     url: "/user/:userid",
     method: "PUT",
     schema: {
-        description: "edits user with provided name and email",
+        description: "Edits user with provided name and email",
         security: bearer,
         tags: ["default"],
         params: {
