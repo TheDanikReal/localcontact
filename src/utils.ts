@@ -12,7 +12,11 @@ function search(query: string): User[] {
     return result
 }
 
-function addUser(name: string, email: string) {
+/**
+ * Adds user with name and email provided
+ * @returns ID of new user
+ */
+function addUser(name: string, email: string): number {
     if (!emailExists(email) && !userExists(name) && emailValid(email)) {
         let userId = data.id
         let user: User = {name: name, email: email, id: userId}
@@ -24,10 +28,11 @@ function addUser(name: string, email: string) {
     }
 }
 
+/**
+ * Removes user by their id 
+ */
 function removeUser(userId: number) {
     try {
-       // console.log(userId)
-        // console.log(data.value.findIndex((user) => user.id == userId))
         data.value.splice(data.value.findIndex((user) => user.id === userId), 1)
         return true
     } catch (err) {
@@ -35,6 +40,10 @@ function removeUser(userId: number) {
     }
 }
 
+/**
+ * 
+ * @returns boolean, returns false on failure
+ */
 function editUser(userId: number, name = "", email = ""): boolean {
     let index = data.value.findIndex((user) => user.id === userId)
     let dataChanged = false

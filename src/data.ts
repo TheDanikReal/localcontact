@@ -12,14 +12,23 @@ export interface Data {
     users: User[]
 }
 
+/**
+ * Main class for ContactDB and id manager
+ */
 export class Database {
     private users: User[] = []
     private data: Data = {currentid: 0, users: this.users}
     bookfile: string = ""
+    /**
+     * @param bookfile Database file, defaults to addresses.data
+     */
     constructor(bookfile="addresses.data") {
         this.bookfile = bookfile
     }
-
+    
+    /**
+     * Get database entries and save to ram
+     */
     public async initialize() {
         if (JSON.stringify(this.data) === `{"currentid":0,"users":[]}`) {
             try {
@@ -29,7 +38,7 @@ export class Database {
                 this.users = deserializedData.users
             } catch (err) {}
         }
-        console.log(this.data)
+        console.debug(this.data)
     }
     public get value(): User[] {
         return this.users
@@ -44,7 +53,6 @@ export class Database {
         this.data.currentid = id
     }
     public async saveData(): Promise<boolean> {
-        // this.data.users = this.users
         console.log(this.data)
         console.log("saving")
         try {

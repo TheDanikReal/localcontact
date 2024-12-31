@@ -5,6 +5,10 @@ import fastifySwaggerUi from "@fastify/swagger-ui"
 import fastifySwagger, { SwaggerOptions } from "@fastify/swagger"
 import { webTokens, TokenPayload } from "./tokens.ts"
 
+const enableLogging = false
+const serverDomain = "192.168.100.4"
+const port = 3000
+
 interface IQueryString {
     user: string
 }
@@ -17,7 +21,7 @@ interface UserID {
     userid: number
 }
 
-const app = fastify({ logger: true })
+const app = fastify({ logger: enableLogging })
 
 let fastifySwaggerUiOptions = {
     routePrefix: '/docs',
@@ -41,10 +45,10 @@ let fastifySwaggerOptions: FastifyRegisterOptions<SwaggerOptions> = {
         },
         servers: [
             {
-                url: "http://localhost:3000/"
+                url: `http://${serverDomain}:${port}/`
             },
             {
-                url: "http://192.168.100.4:3000/"
+                url: "http://localhost:3000/"
             }
         ]
     }
@@ -185,7 +189,7 @@ app.route<{Params:UserID, Body:User}>({
 })
 
 try {
-    await app.listen({port: 3000, host: "0.0.0.0"})
+    await app.listen({port: port, host: "0.0.0.0"})
 } catch (error) {
     app.log.error(error)
 }

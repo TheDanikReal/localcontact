@@ -4,10 +4,6 @@ import search from "@inquirer/search"
 import {userExists, emailExists, emailValid} from "./validators.ts"
 import { User, data } from "./data.ts";
 
-let bookfile = data.bookfile
-
-console.table(data.value)
-
 async function menu() {
     const answer = await select({
         message: 'Select an action',

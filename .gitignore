@@ -5,3 +5,4 @@ src/migration.ts
 src/test2.ts
 node_modules/
 dist/
+.env

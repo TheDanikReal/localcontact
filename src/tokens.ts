@@ -40,8 +40,10 @@ class WebTokens {
             this.data.secret = new TextEncoder().encode(secret)
         }
     }
-    public async createToken(tokenType: string): Promise<string> {
-        if (tokenType != "refresh" && tokenType != "access") {}
+    public async createToken(tokenType: string): Promise<string | undefined> {
+        if (tokenType != "refresh" && tokenType != "access") {
+            return undefined
+        }
         let randomData = randomBytes(32)
         let encryptedToken = await new SignJWT({type: tokenType, random: randomData})
         .setExpirationTime("5hrs")
@@ -103,4 +105,5 @@ class WebTokens {
 
 export const webTokens = new WebTokens("tokens.data")
 await webTokens.initialize()
+console.log(await webTokens.decryptToken("eyJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoicmVmcmVzaCIsInJhbmRvbSI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6WzE1NywyMDgsMTI4LDIzMSw0NSwyMjksMjMyLDE1LDg5LDIyLDE0NSw2NiwxMTEsMTU4LDMyLDI0LDEzMiwyNDAsMjgsMTU5LDExMiw0LDExNCwxNDEsNjMsNzUsNjcsMTU4LDE0Myw2NywxMjIsMTU5XX19.R6TYapzHkEHj9PrI1MlOP-dNqRiAcNJ6afbtWIcMOc8"))
 console.log(webTokens.data.tokens)

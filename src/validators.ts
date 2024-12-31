@@ -12,6 +12,9 @@ function userExists(name: string) {
     return exists
 }
 
+/**
+ * @param email Email to be validated
+ */
 function emailValid(email: string): boolean {
     let emailRegex = /([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+$/g
     try {
