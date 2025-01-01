@@ -5,7 +5,7 @@ import fastifySwaggerUi from "@fastify/swagger-ui"
 import fastifySwagger, { SwaggerOptions } from "@fastify/swagger"
 import { webTokens, TokenPayload } from "./tokens.ts"
 
-const enableLogging = false
+const enableLogging = true
 const serverDomain = "192.168.100.4"
 const port = 3000
 
@@ -21,6 +21,10 @@ interface UserID {
     userid: number
 }
 
+interface RefreshToken {
+    token: string
+}
+console.log("registered interfaces")
 const app = fastify({ logger: enableLogging })
 
 let fastifySwaggerUiOptions = {
@@ -64,7 +68,7 @@ await app.register(fastifySwaggerUi, fastifySwaggerUiOptions)
 
 async function auth(request, reply) {
     let token = request.headers.authorization?.replace("Bearer ", "")
-    if (token && webTokens.verifyToken(token) != undefined) {
+    if (token && webTokens.verifyToken(token, "access") != undefined) {
         let decryptedToken = await webTokens.decryptToken(token)
         request.token = decryptedToken
     } else {
@@ -139,7 +143,7 @@ app.route({
     },
     preHandler: [auth],
     handler: async(request, reply) => {
-        return JSON.stringify({ success: data.saveData })
+        return JSON.stringify({ success: await data.saveData() })
     }
 })
 app.route<{Request: RequestVerified, Params:UserID}>({
@@ -189,6 +193,29 @@ app.route<{Params:UserID, Body:User}>({
     handler: async(request, reply) => {
         console.log(`${request.body.name}, ${request.body.email} for ${request.params.userid}`)
         return { success: editUser(request.params.userid, request.body.name, request.body.email)}
+    }
+})
+
+app.route<{Body: RefreshToken}>({
+    url: "/generate",
+    method: "POST",
+    schema: {
+        tags: ["tokens"],
+        description: "Generates a new access token from refresh token",
+        body: {
+            type: "object",
+            properties: {
+                token: { type: "string" }
+            }
+        }
+    },
+    handler: async(request, reply) => {
+        let token = request.body.token
+        if (token && webTokens.verifyToken(token, "refresh") != undefined) {
+            reply.code(200).send({ accessToken: await webTokens.createToken("access") })
+        } else {
+            reply.code(400).send({ error: "invalid token or no token was provided" })
+        }
     }
 })
 

@@ -44,15 +44,25 @@ class WebTokens {
         if (tokenType != "refresh" && tokenType != "access") {
             return undefined
         }
+        let ttl = ""
+        switch (tokenType) {
+            case "access":
+                ttl = "6hrs"
+                break;
+        
+            case "refresh":
+                ttl = "2w"
+                break;
+        }
         let randomData = randomBytes(32)
         let encryptedToken = await new SignJWT({type: tokenType, random: randomData})
-        .setExpirationTime("5hrs")
+        .setExpirationTime(ttl)
         .setProtectedHeader({alg: this.data.alghoritm})
         .sign(this.data.secret)
         this.data.tokens.push({ token: encryptedToken })
         return encryptedToken
     }
-    public async decryptToken(token: string): Promise<DecryptedToken | boolean> {
+    public async decryptToken(token: string): Promise<DecryptedToken | false> {
         let decryptedToken: boolean | DecryptedToken
         try {
             decryptedToken = await jwtVerify(token, this.data.secret)
@@ -61,20 +71,26 @@ class WebTokens {
         }
         return decryptedToken
     }
-    public async verifyToken(token: string): Promise<Token | undefined> {
+    public async verifyToken(token: string, type: string): Promise<Token | undefined> {
         let cacheToken = this.cache.get(token)
         if (cacheToken) {
             if (cacheToken.validity == true) {
                 return cacheToken.data
             }
         }
-        if (await this.decryptToken(token) != false) {
-            let tokenData = this.data.tokens.find((tokenStore) => tokenStore.token === token)
+        const tokenData = await this.decryptToken(token)
+        if (tokenData != false) {
+            console.log(tokenData.payload.type)
+            if (tokenData.payload.type != type) {
+                return undefined
+            }
+            let tokenStoreData = this.data.tokens.find((tokenStore) => tokenStore.token === token)
+            console.log(tokenData)
             this.cache.set(token, { validity: true, data: tokenData })
             setTimeout(() => {
                 this.cache.set(token, false)
             }, 100000);
-            return tokenData
+            return tokenStoreData
         } else {
             return undefined
         }
@@ -105,5 +121,5 @@ class WebTokens {
 
 export const webTokens = new WebTokens("tokens.data")
 await webTokens.initialize()
-console.log(await webTokens.decryptToken("eyJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoicmVmcmVzaCIsInJhbmRvbSI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6WzE1NywyMDgsMTI4LDIzMSw0NSwyMjksMjMyLDE1LDg5LDIyLDE0NSw2NiwxMTEsMTU4LDMyLDI0LDEzMiwyNDAsMjgsMTU5LDExMiw0LDExNCwxNDEsNjMsNzUsNjcsMTU4LDE0Myw2NywxMjIsMTU5XX19.R6TYapzHkEHj9PrI1MlOP-dNqRiAcNJ6afbtWIcMOc8"))
+console.log(await webTokens.verifyToken("eyJhbGciOiJIUzI1NiJ9.eyJ0eXBlIjoicmVmcmVzaCIsInJhbmRvbSI6eyJ0eXBlIjoiQnVmZmVyIiwiZGF0YSI6WzE1NywyMDgsMTI4LDIzMSw0NSwyMjksMjMyLDE1LDg5LDIyLDE0NSw2NiwxMTEsMTU4LDMyLDI0LDEzMiwyNDAsMjgsMTU5LDExMiw0LDExNCwxNDEsNjMsNzUsNjcsMTU4LDE0Myw2NywxMjIsMTU5XX19.R6TYapzHkEHj9PrI1MlOP-dNqRiAcNJ6afbtWIcMOc8", "refresh"))
 console.log(webTokens.data.tokens)

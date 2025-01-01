@@ -33,7 +33,11 @@ function addUser(name: string, email: string): number {
  */
 function removeUser(userId: number) {
     try {
-        data.value.splice(data.value.findIndex((user) => user.id === userId), 1)
+        const index = data.value.findIndex((user) => user.id === userId)
+        if (index == -1) {
+            return false
+        }
+        data.value.splice(index, 1)
         return true
     } catch (err) {
         return false
