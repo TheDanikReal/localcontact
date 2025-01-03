@@ -212,7 +212,9 @@ app.route<{Body: RefreshToken}>({
     handler: async(request, reply) => {
         let token = request.body.token
         if (token && webTokens.verifyToken(token, "refresh") != undefined) {
-            reply.code(200).send({ accessToken: await webTokens.createToken("access") })
+            reply.code(200).send({ token: await webTokens.createToken("access", token), type: "access" })
+        } else if (!token) {
+            reply.code(200).send({ token: await webTokens.createToken("refresh"), type: "refresh" })
         } else {
             reply.code(400).send({ error: "invalid token or no token was provided" })
         }
