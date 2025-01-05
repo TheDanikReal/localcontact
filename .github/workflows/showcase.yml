@@ -9,7 +9,7 @@ jobs:
         with:
           node-version: '20.x'
       - run: npm ci
-      - run: curl -O https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz
+      - run: wget https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz
       - run: tar xzf vhs_0.8.0_Linux_x86_64.tar.gz -C /opt/hostedtoolcache/vhs/0.8.0/x64/
       
       - uses: charmbracelet/vhs-action@v1
