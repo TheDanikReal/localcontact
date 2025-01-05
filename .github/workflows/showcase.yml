@@ -13,6 +13,7 @@ jobs:
       - run: wget https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 -O /usr/local/bin/ttyd
       - run: wget https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz && tar xzf vhs_0.8.0_Linux_x86_64.tar.gz -C .
       - run: mv vhs_0.8.0_Linux_x86_64 /usr/local/bin/vhs
+      - run: vhs vhs.tape
       - uses: stefanzweifel/git-auto-commit-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
