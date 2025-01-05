@@ -12,10 +12,11 @@ jobs:
       - run: sudo apt install ffmpeg
       - run: mkdir -p ~/.local/bin/
       - run: wget https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 -O ~/.local/bin/ttyd
-      - run: wget https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz && tar xzf vhs_0.8.0_Linux_x86_64.tar.gz -C .
+      - run: wget https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz && tar xzf vhs_0.8.0_Linux_x86_64.tar.gz
       - run: mv vhs_0.8.0_Linux_x86_64 ~/.local/bin/vhs
       - run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-      - run: ls ~/.local/bin/
+      - run: ls ~/.local/bin/ && ls .
+      - run: chmod +x ~/.local/bin/vhs && chmod +x ~/.local/bin/ttyd
       - run: vhs vhs.tape
       - uses: stefanzweifel/git-auto-commit-action@v4
         env:
