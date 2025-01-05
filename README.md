@@ -1,5 +1,5 @@
 # LocalContact
-
+![Showcase](example.gif)
 A TypeScript-based contact management system with REST API support. This project provides both CLI and API interfaces for managing user contacts locally with authentication support.
 
 ## Features
