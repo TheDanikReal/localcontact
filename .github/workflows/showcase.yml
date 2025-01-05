@@ -9,19 +9,17 @@ jobs:
         with:
           node-version: '20.x'
       - run: npm ci
-      - run: wget https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz
-      - run: mkdir -p /opt/hostedtoolcache/vhs/0.8.0/x64/ && tar xzf vhs_0.8.0_Linux_x86_64.tar.gz -C /opt/hostedtoolcache/vhs/0.8.0/x64/
-      - run: mv /opt/hostedtoolcache/vhs/0.8.0/x64/vhs_0.8.0_Linux_x86_64 /opt/hostedtoolcache/vhs/0.8.0/x64/vhs
-      - uses: charmbracelet/vhs-action@v1
-        with:
-          path: 'vhs.tape'
+      - run: sudo apt install ffmpeg
+      - run: wget https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 -O /usr/local/bin/ttyd
+      - run: wget https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz && tar xzf vhs_0.8.0_Linux_x86_64.tar.gz -C .
+      - run: mv vhs_0.8.0_Linux_x86_64 /usr/local/bin/vhs
       - uses: stefanzweifel/git-auto-commit-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           commit_message: Update generated VHS GIF
           branch: main
-          commit_user_name: vhs-action 📼
+          commit_user_name: vhs-updater
           commit_user_email: actions@github.com
-          commit_author: vhs-action 📼 <actions@github.com>
+          commit_author: vhs-updater <actions@github.com>
           file_pattern: '*.gif'
