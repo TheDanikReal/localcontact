@@ -3,25 +3,22 @@ on: workflow_dispatch
 jobs:
   vhs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
       - run: npm ci
-      - run: curl -O https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz
-      - run: tar xzf vhs_0.8.0_Linux_x86_64.tar.gz -C /opt/hostedtoolcache/vhs/0.8.0/x64/
-      
-      - uses: charmbracelet/vhs-action@v1
+      - run: sudo apt install ffmpeg
+      - run: mkdir -p ~/.local/bin/
+      - run: sudo wget https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 -O /usr/bin/ttyd
+      - run: wget https://github.com/charmbracelet/vhs/releases/download/v0.8.0/vhs_0.8.0_Linux_x86_64.tar.gz && tar xzf vhs_0.8.0_Linux_x86_64.tar.gz
+      - run: mv vhs_0.8.0_Linux_x86_64 ~/.local/bin/vhs-0.8
+      - run: chmod +x ~/.local/bin/vhs-0.8/vhs && sudo chmod +x /usr/bin/ttyd
+      - run: ~/.local/bin/vhs-0.8/vhs vhs.tape
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          path: 'vhs.tape'
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          commit_message: Update generated VHS GIF
-          branch: main
-          commit_user_name: vhs-action 📼
-          commit_user_email: actions@github.com
-          commit_author: vhs-action 📼 <actions@github.com>
+          commit_message: Updated VHS GIF
           file_pattern: '*.gif'
