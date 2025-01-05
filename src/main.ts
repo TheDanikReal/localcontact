@@ -109,7 +109,8 @@ async function editmenu() {
     }]  
     })
     let value = await input({
-        message: `Enter new ${item} for ${data.value[user].name}`
+        message: `Enter new ${item} for ${data.value[user].name}`,
+        default: data.value[user][item]
     })
     switch (item) {
         case "name":
