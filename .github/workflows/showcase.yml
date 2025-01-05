@@ -3,6 +3,8 @@ on: workflow_dispatch
 jobs:
   vhs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v4
@@ -16,13 +18,12 @@ jobs:
       - run: mv vhs_0.8.0_Linux_x86_64 ~/.local/bin/vhs-0.8
       - run: chmod +x ~/.local/bin/vhs-0.8/vhs && sudo chmod +x /usr/bin/ttyd
       - run: ~/.local/bin/vhs-0.8/vhs vhs.tape
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          commit_message: Update generated VHS GIF
-          branch: main
-          commit_user_name: vhs-updater
-          commit_user_email: actions@github.com
-          commit_author: vhs-updater <actions@github.com>
-          file_pattern: '*.gif'
+      #- env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v1
+      - run: |
+          git config --global user.name 'VHS action'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+          git checkout "${GITHUB_REF:11}"
+          git commit -am "Updated VHS GIF"
+          git push
