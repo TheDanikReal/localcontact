@@ -6,7 +6,7 @@ Type npm run start
 Sleep 300ms
 Enter
 
-Sleep 1000ms
+Sleep 1500ms
 
 # create new user
 Enter
