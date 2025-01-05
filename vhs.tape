@@ -1,46 +1,54 @@
 Output example.gif
-Require npm
+Require node
 Set WindowBar Colorful
 
-type npm run start
-sleep 300ms
-enter
+Type npm run start
+Sleep 300ms
+Enter
 
-sleep 3000ms
+Sleep 1000ms
 
 # create new user
-enter
-type Danik
-enter
-type daink@example.com
-enter
+Enter
+Sleep 500ms
+Type@200ms Danik
+Sleep 500ms
+Enter
+Sleep 500ms
+Type@100ms `daink@example.com`
+Sleep 500ms
+Enter
 # confirm creating
-sleep 500ms
-enter
+Sleep 500ms
+Enter
+Sleep 300ms
 
 # print all users
-down
-enter
+Down
+Sleep 500ms
+Enter
+Sleep 500ms
 
 # edit email of "Danik"
-down 2
-enter
-enter
-down
-enter
-type danik@example.com
-enter
+Down@200ms 2
+Enter@1000ms 2
+Down
+Sleep 500ms
+Enter
+Sleep 500ms
+Type@200ms `danik@example.com`
+Sleep 500ms
+Enter
+Sleep 500ms
 
 # remove user
-down 3
-enter
-enter
-enter
+Down@500ms 3
+Enter@500ms 3
 
 # exit program
-down 5
-sleep 500ms
-enter
+Down@500ms 5
+Sleep 1000ms
+Enter
 
 # wait until finishing recording
-sleep 1000ms
+Sleep 2000ms
